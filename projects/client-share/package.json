@@ -1,0 +1,15 @@
+{
+  "name": "client-share",
+  "version": "0.0.40",
+  "peerDependencies": {},
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zidabah/lerna-test"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

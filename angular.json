@@ -1,0 +1,416 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "client-report": {
+      "projectType": "library",
+      "root": "projects/client-report",
+      "sourceRoot": "projects/client-report/src",
+      "prefix": "evcr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/client-report/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/client-report/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/client-report/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/client-report/src/test.ts",
+            "tsConfig": "projects/client-report/tsconfig.spec.json",
+            "karmaConfig": "projects/client-report/karma.conf.js",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules",
+                "projects/client-report/src/assets"
+              ]
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/client-report/**/*.ts",
+              "projects/client-report/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "client-share": {
+      "projectType": "library",
+      "root": "projects/client-share",
+      "sourceRoot": "projects/client-share/src",
+      "prefix": "evcs",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/client-share/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/client-share/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/client-share/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/client-share/src/test.ts",
+            "tsConfig": "projects/client-share/tsconfig.spec.json",
+            "karmaConfig": "projects/client-share/karma.conf.js",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets"
+              ]
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/client-share/**/*.ts",
+              "projects/client-share/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "client": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/client",
+      "sourceRoot": "projects/client/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/client",
+            "index": "projects/client/src/index.html",
+            "main": "projects/client/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/client/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/client/src/assets",
+              {
+                "glob": "**/*",
+                "input": "projects/client-assets/src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/client-assets/src/assets/scss/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets",
+                "projects/client-report/src/assets"
+              ]
+            },
+            "allowedCommonJsDependencies": [
+              "core-js",
+              "html2pdf.js",
+              "raf",
+              "seedrandom",
+              "fast-deep-equal",
+              "rgbcolor",
+              "json5",
+              "jszip"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb",
+                  "maximumError": "300kb"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "aws": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "150kb",
+                  "maximumError": "300kb"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aws.ts"
+                }
+              ],
+              "outputPath": "dist/aws"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "client:build:production"
+            },
+            "development": {
+              "browserTarget": "client:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "client:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/client/src/test.ts",
+            "tsConfig": "projects/client/tsconfig.spec.json",
+            "karmaConfig": "projects/client/karma.conf.js",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/client/src/assets",
+              {
+                "glob": "**/*",
+                "input": "projects/client-assets/src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/client-assets/src/assets/scss/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets"
+              ]
+            },
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/client/**/*.ts",
+              "projects/client/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "client:build",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets"
+              ]
+            },
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/client-assets/src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "projects/client-assets/src/assets/scss/styles.scss"
+            ],
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "./"
+            ],
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "client:build",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets"
+              ]
+            },
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/client-assets/src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "projects/client-assets/src/assets/scss/styles.scss"
+            ],
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "./"
+            ],
+            "outputDir": "dist/storybook"
+          }
+        }
+      }
+    },
+    "client-login": {
+      "projectType": "library",
+      "root": "projects/client-login",
+      "sourceRoot": "projects/client-login/src",
+      "prefix": "evcl",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/client-login/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/client-login/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/client-login/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/client-login/src/test.ts",
+            "tsConfig": "projects/client-login/tsconfig.spec.json",
+            "karmaConfig": "projects/client-login/karma.conf.js",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/client-assets/src/assets"
+              ]
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/client-login/**/*.ts",
+              "projects/client-login/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "client-assets": {
+      "projectType": "library",
+      "root": "projects/client-assets",
+      "sourceRoot": "projects/client-assets/src",
+      "prefix": "evca",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/client-assets/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/client-assets/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/client-assets/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/client-assets/**/*.ts",
+              "projects/client-assets/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
+  }
+}

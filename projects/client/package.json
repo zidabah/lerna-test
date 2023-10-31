@@ -1,0 +1,12 @@
+{
+  "name": "client",
+  "version": "0.0.12",
+  "scripts": {
+    "start": "ng serve client",
+    "build": "ng build client",
+    "test": "ng test client",
+    "lint": "ng lint client"
+  },
+  "dependencies": {
+  }
+}
