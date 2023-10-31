@@ -1,0 +1,40 @@
+name: Repo Checks
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  repo_checks:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          clean: true
+          fetch-depth: 0
+
+      - name: "Setup node"
+        uses: actions/setup-node@v3.8.0
+        with:
+          node-version: '18'
+
+      - name: "Install deps"
+        run: |
+          npm install is-ci --save-dev
+          npm ci
+          npx lerna bootstrap
+
+      - name: "Upgrade versions"
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          
+          npx lerna version --conventional-commits --conventional-graduate --yes
+          git add package.json
+          git commit -m 'update packages.json'
+          npx lerna publish from-git --yes --registry=https://npm.pkg.github.com

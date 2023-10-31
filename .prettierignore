@@ -1,0 +1,15 @@
+# Ignore artifacts:
+dist
+documentation
+coverage
+# ide
+.husky
+.idea
+node_modules
+
+# app folders
+src/assets
+
+# Ignore files
+/*.*
+src/*.*

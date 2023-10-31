@@ -1,0 +1,13 @@
+{
+  "name": "client-assets",
+  "version": "0.0.1",
+  "peerDependencies": {},
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zidabah/lerna-test"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
