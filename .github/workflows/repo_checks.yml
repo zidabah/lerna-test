@@ -33,7 +33,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           
-          npx lerna version --conventional-commits --conventional-graduate --yes
+          npx lerna version --conventional-commits --yes
           git add package.json
           git commit -m 'update packages.json'
           npx lerna publish from-git --yes --registry=https://npm.pkg.github.com
