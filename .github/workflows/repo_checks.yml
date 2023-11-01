@@ -25,7 +25,8 @@ jobs:
 
       - name: "Install deps"
         run: |
-          npm i
+          npm install is-ci --save-dev
+          npm ci
           npx lerna bootstrap
 
       - name: "Upgrade versions"
@@ -33,7 +34,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           
-          npx lerna version --conventional-commits --yes
+          npx lerna version --conventional-commits --conventional-graduate --yes
           git add package.json
           git commit -m 'update packages.json'
           npx lerna publish from-git --yes --registry=https://npm.pkg.github.com
