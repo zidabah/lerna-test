@@ -26,7 +26,7 @@ jobs:
       - name: "Install deps"
         run: |
           npm install is-ci --save-dev
-          npm i
+          npm ci
           npx lerna bootstrap
 
       - name: "Upgrade versions"
